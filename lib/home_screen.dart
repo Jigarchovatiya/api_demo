@@ -18,49 +18,76 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Colors.white,
         backgroundColor: Colors.blueGrey,
-        title: Text("API demo"),
+        title: const Text(
+          "API demo",
+          style: TextStyle(
+            decoration: TextDecoration.underline,
+            decorationColor: Colors.white,
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+          ),
+        ),
         centerTitle: true,
       ),
-      body: ListView.builder(
-          itemCount: 1,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              margin: EdgeInsets.all(20),
-              padding: EdgeInsets.all(20),
-              height: 150,
-              width: 300,
+      body: FutureBuilder(
+        future: getData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: apiDemoModel.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    padding: const EdgeInsets.all(20),
+                    height: 150,
+                    width: 300,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "User Id : ${apiDemoModel[index].userId}",
+                          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                        ),
+                        Text(
+                          "Id : ${apiDemoModel[index].id}",
+                          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                        ),
+                        Text(
+                          "Title : ${apiDemoModel[index].title}",
+                          maxLines: 1,
+                          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                        ),
+                        Text(
+                          "Body : ${apiDemoModel[index].body}",
+                          maxLines: 1,
+                          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  );
+                });
+          } else {
+            return const Center(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "User Id : ${apiDemoModel[index].userId}",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                  ),
-                  Text(
-                    "Id : ${apiDemoModel[index].id}",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                  ),
-                  Text(
-                    "Title : ${apiDemoModel[index].title}",
-                    maxLines: 1,
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                  ),
-                  Text(
-                    "Body : ${apiDemoModel[index].body}",
-                    maxLines: 1,
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                  CircularProgressIndicator(
+                    color: Colors.blueGrey,
                   ),
                 ],
               ),
             );
-          }),
+          }
+        },
+      ),
     );
   }
 
